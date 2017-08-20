@@ -14,23 +14,24 @@ Find new and exciting podcasts.
 
 #### Install package dependencies
 
-    Navigate to repo
-    ```
-    npm install
-    ```
+Navigate to repo
+
+```
+npm install
+```
 
 #### Start locally hosted server
 
-    ```
-    npm run dev
-    ```
+```
+npm run dev
+```
 
 #### Get sample data into Mongo:
 
-    Using the mongo shell:
-    ```
-    load("/scripts/initDevDB.js")
-    ```
+Using the mongo shell:
+```
+load("/scripts/initDevDB.js")
+```
 
 Open browser, hit localhost:3000 for the stunningly designed login page.
 Get podcasts from /api/podcasts
