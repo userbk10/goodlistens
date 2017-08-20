@@ -1,0 +1,14 @@
+body {
+   background-color: #b4d1e8
+}
+
+h3 {
+    font-family: Futura, Tahoma, sans-serif;
+
+}
+input {
+    background-color: #e0b3d5;
+}
+input[type="Submit"]  {
+    background-color: #d8f2a9;
+}
