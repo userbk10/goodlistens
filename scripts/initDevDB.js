@@ -71,6 +71,8 @@ db.podcasts.insertMany([
 var podcastID = db.podcasts.find({name: "podcast podcast"}).toArray()[0]._id;
 
 db.episodes.drop(); // kill all the fake episodes
+//Make the new fake episodes
+//Manually add an ID because I don't want to query for it after the fact.
 var episodeID = new ObjectId();
 db.episodes.insert({
     _id: episodeID,
