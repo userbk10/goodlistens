@@ -32,7 +32,7 @@ authRouter.route("/profile")
     });
 
 authRouter.route("/login")
-    .post(passport.authenticate("local", { failureRedirect: "/fuck"}),
+    .post(passport.authenticate("local", { failureRedirect: "/"}),
      function (req, res) {
          res.redirect("/auth/profile");
      });

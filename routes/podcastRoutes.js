@@ -11,6 +11,7 @@ let Podcast = mongoose.model("Podcast");
 */
 podcastRouter.route("/")
     .get(function (req, res, next) {
+        //need to implement querying
         let query = {};
         let limit = 20;
         let offset = 0;
@@ -19,8 +20,9 @@ podcastRouter.route("/")
         }
         //ignore all the query stuff for now, let's just get the podcast returning from the database.
         console.log("Querying for all podcasts");
-        Podcast.find({}).populate("episodes")
-        .exec( function (err, result) {
+        Podcast.find({})
+        .populate("episodes")
+        .then( function ( result) {
             res.json(result);
         });
         /*
@@ -36,7 +38,7 @@ podcastRouter.route("/")
     });
 
 function isValidId(id) {
-    let regex = RegExp("^[a-zA-Z0-9]{24}$");
+    let regex = RegExp("^[a-zA-Z0-9]{24}$"); // Alphanumeric string of length 24
     return regex.test(id);
 }
 

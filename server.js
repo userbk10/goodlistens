@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(session( {
-    "secret": secret,
+    "secret": secret,// secret!
     "resave": true,
     "saveUninitialized": false
 }));
@@ -40,11 +40,6 @@ let authRouter = require("./routes/authRoutes.js");
 //express routes
 app.use("/api/podcasts", podcastRouter);
 app.use("/auth", authRouter);
-
-
-let test = new Episode({
-    
-});
 
 let port = process.env.PORT || 3000;
 
