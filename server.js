@@ -41,6 +41,10 @@ let authRouter = require("./routes/authRoutes.js");
 app.use("/api/podcasts", podcastRouter);
 app.use("/auth", authRouter);
 
+//register error handler middleware
+require("./src/errorHandler.js")(app);
+
+
 let port = process.env.PORT || 3000;
 
 app.listen(port, () => {

@@ -33,8 +33,42 @@ podcastRouter.route("/")
     });
 
 podcastRouter.route("/")
-    .post(function (req, res, next) {
-        //send json body with podcast details.  Requires a logged in account to add podcasts.
+    .post(function (req, res, next) { 
+        if(req.headers["content-type"] !== "application/json") {
+            console.log("request headers:  ");
+            console.log(req.headers);
+            res.status(415).send("Request header content-type must be 'application/json'");
+            next();
+        }
+        let newPodcast = new Podcast();
+        if(req.body.name) {
+            newPodcast.name = req.body.name;
+        } else {
+            res.status(422).send("Missing required value for podcast name!");
+            next();
+        }
+        if(req.body.website) {
+            newPodcast.website = req.body.website;
+        }
+        if(req.body.author) {
+            newPodcast.author = req.body.author;
+        }
+        if(req.body.description) {
+            newPodcast.description = req.body.description;
+        }
+        if(req.body.network) {
+            newPodcast.network = req.body.network;
+        }
+        if(req.body.tags) {
+            newPodcast.tags = req.body.tags;
+        }
+
+        newPodcast.save()
+        .then( (response) => {
+            res.status(201).json(response);
+        }).catch((err) => {
+            next(err);
+        });
     });
 
 function isValidId(id) {
