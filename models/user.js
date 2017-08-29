@@ -11,11 +11,11 @@ let userSchema = new mongoose.Schema({
     passwordHash: {type: String, required: true},
     salt: String,
     podcastRatings: [{  // A user can have none or many
-        podcastId: String,
+        podcastId: {type: mongoose.Schema.Types.ObjectId, ref: "Podcast"},
         rating: {type: Number, min: 1, max: 5}
     }],
     episodeRatings: [{ //this is probably not the best way to do this
-        episodeId: String,
+        episodeId: {type: mongoose.Schema.Types.ObjectId, ref: "Episode"},
         rating: {type: Number, min: 1, max:5}
     }],
 });

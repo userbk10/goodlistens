@@ -9,10 +9,11 @@ let podcastSchema = new Schema( {
     description: {type: String, default: ""},
     episodes: [{type: mongoose.Schema.Types.ObjectId, ref: "Episode"}],
     network: {type: String, default: ""},
-    tags: [String]
+    tags: [String],
+    ratingsCount: {type: Number, default: 0},
+    averageRating: {type: Number, default: 0} // this is a total rating, not an average.  Average is calculated
 });
 
 podcastSchema.plugin(uniqueValidator, {message: "Another podcast for given name already exists!"});
 
 mongoose.model("Podcast", podcastSchema);
-

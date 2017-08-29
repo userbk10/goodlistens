@@ -9,7 +9,9 @@ db.podcasts.insertMany([
         description: "",
         episodes: [],
         network: "Sample Podcast Network",
-        tags: ["comedy","sports"]
+        tags: ["comedy","sports"],
+        ratingsCount: 0,
+        averageRating: 0
     },   
     {
         name:"Podcast Wonderful",
@@ -17,14 +19,18 @@ db.podcasts.insertMany([
         author: "Jane Johnson",
         episodes: [],
         network: "",
-        tags: ["true crime","serial"]
+        tags: ["true crime","serial"],
+        ratingsCount: 0,
+        averageRating: 0
     },{
         name:"ShowStopper",
         website: "www.showstopper.com",
         author: "Robbo Jimm",
         episodes: [],
         network: "",
-        tags: ["history","serial"]
+        tags: ["history","serial"],
+        ratingsCount: 0,
+        averageRating: 0
 
     },{
         name:"Podcast podcast",
@@ -32,7 +38,9 @@ db.podcasts.insertMany([
         author: "Jane Johnson",
         episodes: [],
         network: "",
-        tags: ["meta","soVery"]
+        tags: ["meta","soVery"],
+        ratingsCount: 0,
+        averageRating: 0
 
     },{
         name:"Hambone Presents",
@@ -40,7 +48,9 @@ db.podcasts.insertMany([
         author: "Pork Sausage",
         episodes: [],
         network: "",
-        tags: ["storytelling","food"]
+        tags: ["storytelling","food"],
+        ratingsCount: 0,
+        averageRating: 0
 
     },{
         name:"Tripping Through history",
@@ -48,7 +58,9 @@ db.podcasts.insertMany([
         author: "Alan Watts",
         episodes: [],
         network: "",
-        tags: ["visual","history"]
+        tags: ["visual","history"],
+        ratingsCount: 0,
+        averageRating: 0
 
     },{
         name:"MovieCast",
@@ -56,7 +68,9 @@ db.podcasts.insertMany([
         author: "Jane Johnson",
         episodes: [],
         network: "",
-        tags: ["movies"]
+        tags: ["movies"],
+        ratingsCount: 0,
+        averageRating: 0
 
     },{
         name:"Mystery Show",
@@ -64,8 +78,9 @@ db.podcasts.insertMany([
         author: "Jane Johnson",
         episodes: [],
         network: "",
-        tags: []
-
+        tags: [],
+        ratingsCount: 0,
+        averageRating: 0
     }]);
 
 var podcastID = db.podcasts.find({name: "podcast podcast"}).toArray()[0]._id;

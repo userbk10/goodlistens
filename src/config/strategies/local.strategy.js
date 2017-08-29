@@ -9,10 +9,8 @@ passport.use(new localStrategy(
         User.findOne({username: username})   
         .then( (user) => {
             if( !user || !(user.validPassword(password) )) {
-                console.log("SUCK IT WEINER");
                 return done(null, false, {message: "Incorrect username or password"});
             } 
-
             return done(null, user);
         }).catch(done);
     }));

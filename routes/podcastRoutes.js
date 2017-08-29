@@ -1,7 +1,8 @@
 const podcastRouter = require("express").Router();
 let mongoose = require("mongoose");
 let Podcast = mongoose.model("Podcast");
-
+let User = mongoose.model("User");
+"use strict";
 //  /Podcasts route
 
 /*
@@ -13,23 +14,19 @@ podcastRouter.route("/")
     .get(function (req, res, next) {
         //need to implement querying
         let query = {};
-        let limit = 20;
+        let limit = 20; // default query limit
         let offset = 0;
-        if(typeof req.query.limit !== "undefined" && req.query.limit <= 50) {
+        if(typeof req.query.limit !== "undefined" && req.query.limit < 50) {
             limit = req.query.limit;
         }
         //ignore all the query stuff for now, let's just get the podcast returning from the database.
-        console.log("Querying for all podcasts");
         Podcast.find({})
         .populate("episodes")
         .then( function ( result) {
             res.json(result);
+        }).catch((err)=> {
+            next(err);
         });
-        /*
-        .then( (result) => {
-            res.json(result);
-        });
-        */
     });
 
 podcastRouter.route("/")
@@ -77,35 +74,73 @@ function isValidId(id) {
 }
 
 podcastRouter.route("/:podcastId")
-    .get( function (req, res) {
+    .get( function (req, res, next) {
         if(isValidId(req.params.podcastId)) {
             Podcast.findById(req.params.podcastId)
             .then( (result) => {
                 if(result) {
                     res.json(result);
                 } else {
-                    res.status(404).json(`Could not find podcast with id: ${req.params.podcastId}`);
+                    res.status(404).json({error: `Could not find podcast with id ${req.params.podcastId}` });
                 }               
+            }).catch( (err) => {
+                next(err);   
             });
         } else {
-            res.status(400).json("Podcast ID is not valid");
+            res.status(400).json({error: "Podcast ID is not valid!"});
         }
     });
 
 podcastRouter.route("/:podcastId/Episodes")
-    .get( function( req, res) {
-        if(isValidId((req.params.podcastId))) {
-            Podcast.findById(req.params.podcastId)
-            .then ((result) => {
-                if(result) {
-                    res.json(result.shit);
-                } else { // no podcast found with that ID, return 404 Not Found
-                    res.status(404).json(`Could not find podcast with id ${req.params.podcastId}`);
-                }
-            });
+    .get( function( req, res, next) {
+        if(isValidId(req.params.podcastId)) {
+            //do stuff
+        }
+    });
+
+podcastRouter.route("/:podcastId/Rating")
+    .put( function (req, res, next) {
+        if(!req.user) {
+            res.status(403).json({error: "You must be logged in to rate podcasts!"});
         } else {
-            res.status(400).json("Podcast ID is not valid");
-        }// podcastId is not a valid ID, return 400 Bad Request  
+            if(isValidId(req.params.podcastId)) {
+                if(req.body.rating <= 5 && req.body.rating > 0) { //we are good to update the rating for the podcast. 
+                    Podcast.findById(req.params.podcastId)
+                    .then ((result) => {
+                        if(result) {
+                            // need old total rating number to calculate new average rating
+                            let totalRating = result.averageRating * result.ratingsCount; 
+                            result.ratingsCount += 1;
+                            result.averageRating = ( totalRating + Number(req.body.rating) ) / result.ratingsCount;
+                            result.save()
+                                .then( (updatedPodcast) => {
+                                    //res.send(UpdatedPodcast);
+                                    User.update(
+                                        {_id: req.user._id},
+                                        {$addToSet: {podcastRatings: {podcastId: updatedPodcast._id, rating: req.body.rating}}}
+                                    )
+                                    .then((updatedUser) => {
+                                        res.send({Podcast: updatedPodcast, User: updatedUser});
+                                    }).catch((err) => {
+                                        next(err);
+                                    });     
+                                }).catch((err) => {
+                                    next(err);
+                                });
+                        } else { // no podcast found with that ID, return 404 Not Found
+                            res.status(404).json({error: `Could not find podcast with id ${req.params.podcastId}` });
+                        }
+                    }).catch( (err) => {
+                        next(err);
+                    });
+                } else {
+                    res.status(400).json({error: "Rating is not valid!"});
+                }
+            } else {
+                res.status(400).json({error: "Podcast ID is not valid!"});
+            }
+        }
+
     });
 
 module.exports = podcastRouter;

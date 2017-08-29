@@ -7,7 +7,7 @@ let passport = require("passport");
 authRouter.route("/register")
     .post(function (req, res, next) {
         if(req.body.password !== req.body.passwordConfirm) {
-            return res.status(422).json("Passwords do not match!");
+            return res.status(422).json({error: "Passwords do not match!"});
         }
         var user = new User(); 
         user.username = req.body.username;
@@ -21,14 +21,16 @@ authRouter.route("/register")
 
 authRouter.route("/profile")
     .get( function (req, res, next) {
-        console.log(req);
+        console.log(req.headers);
         if(!req.user) {
-            res.status(401).json("You must be logged in to view this page");
+            res.status(401).json({error: "You must be logged in to view this page"});
+        } else {
+            User.findById(req.user._id)
+            .then( (result) => {
+                res.json(result);
+            }).catch(next);
         }
-        User.findById(req.user._id)
-        .then( (result) => {
-            res.json(result);
-        }).catch(next);
+
     });
 
 authRouter.route("/login")
